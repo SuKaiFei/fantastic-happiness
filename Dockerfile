@@ -8,7 +8,7 @@ RUN mkdir -p /app/logs
 WORKDIR /app
 
 ADD fantastic-happiness /app/fantastic-happiness
-ADD configs /app/config
+COPY configs /app/configs
 
 EXPOSE 8000
 EXPOSE 9000

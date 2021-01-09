@@ -7,6 +7,8 @@
 
 # configs
 /configs/db.toml
+/configs/redis.toml
+/configs/application-example.toml
 
 # Test binary, built with `go test -c`
 *.test
