@@ -1,8 +1,14 @@
 FROM alpine:latest
+
+LABEL sukaifei kaifeisu@gmail.com
+
 RUN mkdir -p /app
+RUN mkdir -p /app/logs
+
 WORKDIR /app
 
 ADD fantastic-happiness /app/fantastic-happiness
+ADD configs /app/config
 
 EXPOSE 8000
 EXPOSE 9000
