@@ -13,4 +13,4 @@ COPY configs /app/configs
 EXPOSE 8000
 EXPOSE 9000
 
-CMD ["./fantastic-happiness","-conf","-configs","-log.dir","./logs"]
+CMD ["./fantastic-happiness", "-conf","configs", "-log.dir","./logs"]
