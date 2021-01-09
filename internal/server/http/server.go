@@ -4,7 +4,6 @@ import (
 	"net/http"
 
 	pb "github.com/SuKaiFei/fantastic-happiness/api"
-	"github.com/SuKaiFei/fantastic-happiness/internal/model"
 	"github.com/go-kratos/kratos/pkg/conf/paladin"
 	"github.com/go-kratos/kratos/pkg/log"
 	bm "github.com/go-kratos/kratos/pkg/net/http/blademaster"
@@ -34,10 +33,6 @@ func New(s pb.DemoServer) (engine *bm.Engine, err error) {
 
 func initRouter(e *bm.Engine) {
 	e.Ping(ping)
-	g := e.Group("/fantastic-happiness")
-	{
-		g.GET("/start", howToStart)
-	}
 }
 
 func ping(ctx *bm.Context) {
@@ -45,12 +40,4 @@ func ping(ctx *bm.Context) {
 		log.Error("ping error(%v)", err)
 		ctx.AbortWithStatus(http.StatusServiceUnavailable)
 	}
-}
-
-// example for http request handler.
-func howToStart(c *bm.Context) {
-	k := &model.Kratos{
-		Hello: "Golang 大法好 !!!",
-	}
-	c.JSON(k, nil)
 }

@@ -12,26 +12,18 @@ func newTestDao() (*dao, func(), error) {
 	if err != nil {
 		return nil, nil, err
 	}
-	memcache, cleanup2, err := NewMC()
+	client, cleanup2, err := NewDB()
 	if err != nil {
 		cleanup()
 		return nil, nil, err
 	}
-	db, cleanup3, err := NewDB()
+	daoDao, cleanup3, err := newDao(redis, client)
 	if err != nil {
-		cleanup2()
-		cleanup()
-		return nil, nil, err
-	}
-	daoDao, cleanup4, err := newDao(redis, memcache, db)
-	if err != nil {
-		cleanup3()
 		cleanup2()
 		cleanup()
 		return nil, nil, err
 	}
 	return daoDao, func() {
-		cleanup4()
 		cleanup3()
 		cleanup2()
 		cleanup()

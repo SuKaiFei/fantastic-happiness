@@ -2,16 +2,19 @@ package dao
 
 import (
 	"context"
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
+	"time"
 
-	"github.com/SuKaiFei/fantastic-happiness/internal/model"
 	"github.com/go-kratos/kratos/pkg/conf/paladin"
-	"github.com/go-kratos/kratos/pkg/database/sql"
 )
 
-func NewDB() (db *sql.DB, cf func(), err error) {
+func NewDB() (client *mongo.Client, cf func(), err error) {
 	var (
-		cfg sql.Config
-		ct  paladin.TOML
+		cfg struct {
+			URI string `toml:"uri"`
+		}
+		ct paladin.TOML
 	)
 	if err = paladin.Get("db.toml").Unmarshal(&ct); err != nil {
 		return
@@ -19,12 +22,19 @@ func NewDB() (db *sql.DB, cf func(), err error) {
 	if err = ct.Get("Client").UnmarshalTOML(&cfg); err != nil {
 		return
 	}
-	db = sql.NewMySQL(&cfg)
-	cf = func() { db.Close() }
-	return
-}
 
-func (d *dao) RawArticle(ctx context.Context, id int64) (art *model.Article, err error) {
-	// get data from db
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	client, err = mongo.Connect(ctx, options.Client().ApplyURI(cfg.URI))
+	if err != nil {
+		return nil, nil, err
+	}
+
+	cf = func() {
+		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+		defer cancel()
+		_ = client.Disconnect(ctx)
+	}
+
 	return
 }
