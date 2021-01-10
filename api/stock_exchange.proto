@@ -1,0 +1,20 @@
+// 定义项目 API 的 proto 文件 可以同时描述 gRPC 和 HTTP API
+// protobuf 文件参考:
+//  - https://developers.google.com/protocol-buffers/
+syntax = "proto3";
+
+import "github.com/gogo/protobuf/gogoproto/gogo.proto";
+
+package github.com.SuKaiFei.fantastic_happiness.service.v1;
+
+option go_package = "api";
+option (gogoproto.goproto_getters_all) = false;
+
+// 股票交易所
+enum StockExchange {
+    _ = 0;
+    // 上海证券交易所
+    SSE = 1;
+    // 深圳证券交易所
+    SZSE = 2;
+}

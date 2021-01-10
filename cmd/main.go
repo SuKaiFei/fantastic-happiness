@@ -17,7 +17,7 @@ func main() {
 	log.Init(nil) // debug flag: log.dir={path}
 	defer log.Close()
 	log.Info("fantastic-happiness start")
-	paladin.Init()
+	_ = paladin.Init()
 	_, closeFunc, err := di.InitApp()
 	if err != nil {
 		panic(err)

@@ -2,7 +2,6 @@ package dao
 
 import (
 	"context"
-	"github.com/go-kratos/kratos/pkg/cache/memcache"
 	"github.com/go-kratos/kratos/pkg/cache/redis"
 	"github.com/go-kratos/kratos/pkg/conf/paladin"
 	"github.com/go-kratos/kratos/pkg/sync/pipeline/fanout"
@@ -18,13 +17,16 @@ var Provider = wire.NewSet(New, NewDB, NewRedis)
 type Dao interface {
 	Close()
 	Ping(ctx context.Context) (err error)
+
+	Stocker
 }
 
 // dao dao.
 type dao struct {
-	db    *mongo.Client
+	db   *mongo.Client
+	fHDB *mongo.Database
+
 	redis *redis.Redis
-	mc    *memcache.Memcache
 	cache *fanout.Fanout
 }
 
@@ -42,6 +44,7 @@ func newDao(r *redis.Redis, db *mongo.Client) (d *dao, cf func(), err error) {
 	}
 	d = &dao{
 		db:    db,
+		fHDB:  db.Database("fantastic-happiness"),
 		redis: r,
 		cache: fanout.New("cache"),
 	}

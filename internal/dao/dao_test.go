@@ -7,22 +7,14 @@ import (
 	"testing"
 
 	"github.com/go-kratos/kratos/pkg/conf/paladin"
-	"github.com/go-kratos/kratos/pkg/testing/lich"
 )
 
 var d *dao
 var ctx = context.Background()
 
 func TestMain(m *testing.M) {
-	flag.Set("conf", "../../test")
-	flag.Set("f", "../../test/docker-compose.yaml")
+	_ = flag.Set("conf", "../../configs")
 	flag.Parse()
-	disableLich := os.Getenv("DISABLE_LICH") != ""
-	if !disableLich {
-		if err := lich.Setup(); err != nil {
-			panic(err)
-		}
-	}
 	var err error
 	if err = paladin.Init(); err != nil {
 		panic(err)
@@ -33,8 +25,5 @@ func TestMain(m *testing.M) {
 	}
 	ret := m.Run()
 	cf()
-	if !disableLich {
-		_ = lich.Teardown()
-	}
 	os.Exit(ret)
 }

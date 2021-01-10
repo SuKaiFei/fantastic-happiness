@@ -24,3 +24,4 @@ func NewClient(cfg *warden.ClientConfig, opts ...grpc.DialOption) (DemoClient, e
 
 // 生成 gRPC 代码
 //go:generate kratos tool protoc --grpc --bm api.proto
+//go:generate kratos tool protoc --grpc stock_exchange.proto
