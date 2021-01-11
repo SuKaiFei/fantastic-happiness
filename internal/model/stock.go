@@ -1,7 +1,6 @@
 package model
 
 import (
-	pb "github.com/SuKaiFei/fantastic-happiness/api"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"time"
 )
@@ -10,7 +9,7 @@ import (
 type Stock struct {
 	ID            primitive.ObjectID `json:"id" bson:"_id,omitempty"`
 	Date          time.Time          `json:"date" bson:"date"`                     // 股票时间，一天一个股票只能有一个
-	StockExchange pb.StockExchange   `json:"stock_exchange" bson:"stock_exchange"` // 股票所在的交易所
+	StockExchange string             `json:"stock_exchange" bson:"stock_exchange"` // pb.StockExchange 股票所在的交易所
 	StockCode     string             `json:"stock_code" bson:"stock_code"`         // 股票代码
 	StockName     string             `json:"stock_name" bson:"stock_name"`         // 股票名称
 	Prices        []*StockPrice      `json:"prices" bson:"prices"`                 // 股票价格

@@ -60,7 +60,7 @@ func (s *Service) GetSSEStockList(ctx context.Context) (stocks []*model.Stock, e
 			price, _ := strconv.ParseFloat(datum.Trade, 64)
 			stocksTmp[i] = &model.Stock{
 				Date:          curTime,
-				StockExchange: pb.StockExchange_SSE,
+				StockExchange: pb.StockExchange_SSE.String(),
 				StockCode:     datum.Code,
 				StockName:     datum.Name,
 				Prices: []*model.StockPrice{
@@ -115,7 +115,7 @@ func (s *Service) GetSZSEStockList(ctx context.Context) (stocks []*model.Stock, 
 			price, _ := strconv.ParseFloat(datum.Trade, 64)
 			stocksTmp[i] = &model.Stock{
 				Date:          curTime,
-				StockExchange: pb.StockExchange_SSE,
+				StockExchange: pb.StockExchange_SZSE.String(),
 				StockCode:     datum.Code,
 				StockName:     datum.Name,
 				Prices: []*model.StockPrice{

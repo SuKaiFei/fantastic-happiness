@@ -14,7 +14,7 @@ func TestDaoAddStock(t *testing.T) {
 		var (
 			stock = &model.Stock{
 				Date:          time.Now(),
-				StockExchange: pb.StockExchange_SSE,
+				StockExchange: pb.StockExchange_SSE.String(),
 				StockCode:     "su",
 				StockName:     "test",
 				Prices:        []*model.StockPrice{{Time: time.Now(), Price: 6666}},
@@ -29,6 +29,26 @@ func TestDaoAddStock(t *testing.T) {
 			Convey("Then err should be nil.result should not be nil.", func() {
 				So(err, ShouldBeNil)
 				So(result, ShouldNotBeNil)
+			})
+		})
+	})
+}
+
+func TestDaoGetStockByToday(t *testing.T) {
+	Convey("GetStockByToday", t, func() {
+		var (
+			projections = []string{"_id"}
+		)
+		Convey("When everything goes positive", func() {
+			stocks, err := d.GetStockByToday(ctx, projections...)
+			if err == nil {
+				for _, stock := range stocks {
+					t.Logf("%+v", stock)
+				}
+			}
+			Convey("Then err should be nil.result should not be nil.", func() {
+				So(err, ShouldBeNil)
+				So(stocks, ShouldNotBeNil)
 			})
 		})
 	})

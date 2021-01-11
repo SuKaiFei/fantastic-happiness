@@ -68,6 +68,9 @@ func New(d dao.Dao) (s *Service, cf func(), err error) {
 		if _, err = s.c.AddFunc("0 30 9 * * *", s.jobSyncSZSEStockList); err != nil {
 			return nil, nil, err
 		}
+		if _, err = s.c.AddFunc("0 0 16 * * *", s.jobSyncSZSEStockList); err != nil {
+			return nil, nil, err
+		}
 	}
 	s.c.Start()
 
