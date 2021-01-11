@@ -15,3 +15,13 @@ func TestServicejobSyncSSStockList(t *testing.T) {
 		})
 	})
 }
+
+func TestServicejobSyncSZSEStockList(t *testing.T) {
+	Convey("jobSyncSZSEStockList", t, func() {
+		Convey("When everything goes positive", func() {
+			s.jobSyncSZSEStockList()
+			Convey("No return values", func() {
+			})
+		})
+	})
+}

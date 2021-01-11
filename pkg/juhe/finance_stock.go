@@ -96,26 +96,26 @@ type SzAllFinanceStockResp struct {
 		Page       string `json:"page"`
 		Num        string `json:"num"`
 		Data       []struct {
-			Symbol        string  `json:"symbol"`
-			Name          string  `json:"name"`
-			Trade         string  `json:"trade"`
-			Pricechange   float64 `json:"pricechange"`
-			Changepercent float64 `json:"changepercent"`
-			Buy           string  `json:"buy"`
-			Sell          string  `json:"sell"`
-			Settlement    string  `json:"settlement"`
-			Open          string  `json:"open"`
-			High          string  `json:"high"`
-			Low           string  `json:"low"`
-			Volume        int     `json:"volume"`
-			Amount        int     `json:"amount"`
-			Code          string  `json:"code"`
-			Ticktime      string  `json:"ticktime"`
-			Per           float64 `json:"per"`
-			Pb            float64 `json:"pb"`
-			Mktcap        float64 `json:"mktcap"`
-			Nmc           float64 `json:"nmc"`
-			Turnoverratio float64 `json:"turnoverratio"`
+			Symbol        string      `json:"symbol"`
+			Code          string      `json:"code"`
+			Name          string      `json:"name"`
+			Trade         string      `json:"trade"`
+			Pricechange   interface{} `json:"pricechange"`
+			Changepercent interface{} `json:"changepercent"`
+			Buy           string      `json:"buy"`
+			Sell          string      `json:"sell"`
+			Settlement    string      `json:"settlement"`
+			Open          string      `json:"open"`
+			High          string      `json:"high"`
+			Low           string      `json:"low"`
+			Volume        int         `json:"volume"`
+			Amount        int64       `json:"amount"`
+			Ticktime      string      `json:"ticktime"`
+			Per           float64     `json:"per"`
+			Pb            float64     `json:"pb"`
+			Mktcap        float64     `json:"mktcap"`
+			Nmc           float64     `json:"nmc"`
+			Turnoverratio float64     `json:"turnoverratio"`
 		} `json:"data"`
 	} `json:"result"`
 }

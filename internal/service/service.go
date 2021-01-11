@@ -2,6 +2,8 @@ package service
 
 import (
 	"context"
+	"log"
+	"os"
 
 	pb "github.com/SuKaiFei/fantastic-happiness/api"
 	"github.com/SuKaiFei/fantastic-happiness/internal/dao"
@@ -41,7 +43,10 @@ func New(d dao.Dao) (s *Service, cf func(), err error) {
 	s = &Service{
 		ac:  &paladin.TOML{},
 		dao: d,
-		c:   cron.New(),
+		c: cron.New(
+			cron.WithSeconds(),
+			cron.WithLogger(cron.VerbosePrintfLogger(log.New(os.Stdout, "", log.LstdFlags))),
+		),
 	}
 	cf = s.Close
 	err = paladin.Watch("application.toml", s.ac)
@@ -57,10 +62,10 @@ func New(d dao.Dao) (s *Service, cf func(), err error) {
 	}
 
 	if !isTesting {
-		if _, err = s.c.AddFunc("30 9 * * *", s.jobSyncSSEStockList); err != nil {
+		if _, err = s.c.AddFunc("0 30 9 * * *", s.jobSyncSSEStockList); err != nil {
 			return nil, nil, err
 		}
-		if _, err = s.c.AddFunc("30 9 * * *", s.jobSyncSZSEStockList); err != nil {
+		if _, err = s.c.AddFunc("0 30 9 * * *", s.jobSyncSZSEStockList); err != nil {
 			return nil, nil, err
 		}
 	}

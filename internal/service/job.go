@@ -7,6 +7,7 @@ import (
 
 // jobSyncSSEStockList 作业同步今天上海证券交易所股票列表
 func (s *Service) jobSyncSSEStockList() {
+	log.Info("jobSyncSSEStockList start")
 	ctx := context.Background()
 
 	stocks, err := s.GetSSEStockList(ctx)
@@ -23,11 +24,13 @@ func (s *Service) jobSyncSSEStockList() {
 		}
 	}
 
+	log.Info("jobSyncSSEStockList end")
 	return
 }
 
 // jobSyncSZSEStockList 作业同步今天深圳证券交易所股票列表
 func (s *Service) jobSyncSZSEStockList() {
+	log.Info("jobSyncSZSEStockList start")
 	ctx := context.Background()
 
 	stocks, err := s.GetSZSEStockList(ctx)
@@ -44,5 +47,6 @@ func (s *Service) jobSyncSZSEStockList() {
 		}
 	}
 
+	log.Info("jobSyncSZSEStockList start")
 	return
 }

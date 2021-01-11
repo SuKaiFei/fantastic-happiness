@@ -42,3 +42,21 @@ func TestServiceGetSSEStockList(t *testing.T) {
 		})
 	})
 }
+
+func TestServiceGetSZSEStockList(t *testing.T) {
+	Convey("GetSZSEStockList", t, func() {
+		var ()
+		Convey("When everything goes positive", func() {
+			p1, err := s.GetSZSEStockList(ctx)
+			if err == nil {
+				for _, v := range p1 {
+					t.Logf("%+v", v)
+				}
+			}
+			Convey("Then err should be nil.p1 should not be nil.", func() {
+				So(err, ShouldBeNil)
+				So(p1, ShouldNotBeNil)
+			})
+		})
+	})
+}
