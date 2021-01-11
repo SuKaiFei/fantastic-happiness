@@ -2,8 +2,11 @@ package service
 
 import (
 	"context"
+	"github.com/piquette/finance-go"
 	"log"
+	"net/http"
 	"os"
+	"time"
 
 	pb "github.com/SuKaiFei/fantastic-happiness/api"
 	"github.com/SuKaiFei/fantastic-happiness/internal/dao"
@@ -60,6 +63,12 @@ func New(d dao.Dao) (s *Service, cf func(), err error) {
 	if err != nil {
 		return nil, nil, err
 	}
+
+	finance.SetHTTPClient(
+		&http.Client{
+			Timeout: 1 * time.Minute,
+		},
+	)
 
 	if !isTesting {
 		if _, err = s.c.AddFunc("0 30 9 * * *", s.jobSyncSSEStockList); err != nil {

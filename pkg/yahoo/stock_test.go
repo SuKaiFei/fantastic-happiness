@@ -2,8 +2,10 @@ package yahoo
 
 import (
 	"fmt"
+	"github.com/piquette/finance-go"
 	"github.com/piquette/finance-go/chart"
 	"github.com/piquette/finance-go/datetime"
+	"net/http"
 	"testing"
 	"time"
 )
@@ -31,7 +33,8 @@ func TestName(t *testing.T) {
 
 	// Basic chart example.
 	// --------------------
-	startDate := time.Date(2021, 1, 11, 00, 00, 00, 00, time.Local)
+
+	startDate := time.Date(2021, 1, 1, 00, 00, 00, 00, time.Local)
 	endDate := time.Date(2021, 1, 11, 23, 59, 59, 00, time.Local)
 	params := &chart.Params{
 		Symbol:   "000725.SZ",
@@ -39,7 +42,11 @@ func TestName(t *testing.T) {
 		Start:    datetime.New(&startDate),
 		End:      datetime.New(&endDate),
 	}
-
+	finance.SetHTTPClient(
+		&http.Client{
+			Timeout: 1 * time.Minute,
+		},
+	)
 	iter := chart.Get(params)
 
 	for iter.Next() {
