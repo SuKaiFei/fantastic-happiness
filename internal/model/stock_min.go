@@ -6,7 +6,7 @@ import (
 )
 
 // 股票
-type StockDay struct {
+type StockMin struct {
 	ID            primitive.ObjectID `json:"id" bson:"_id,omitempty"`
 	Date          time.Time          `json:"date" bson:"date"`                     // 股票时间，一天一个股票只能有一个
 	StockExchange string             `json:"stock_exchange" bson:"stock_exchange"` // 股票所在的交易所
@@ -15,8 +15,8 @@ type StockDay struct {
 	Prices        []*StockPriceItem  `json:"prices" bson:"prices"`                 // 股票价格
 }
 
-func (s *StockDay) CollectionName() string {
-	return "stock_day"
+func (s *StockMin) CollectionName() string {
+	return "stock_min"
 }
 
 type StockPriceItem struct {

@@ -10,6 +10,7 @@ import (
 	"github.com/SuKaiFei/fantastic-happiness/internal/server/grpc"
 	"github.com/SuKaiFei/fantastic-happiness/internal/server/http"
 	"github.com/SuKaiFei/fantastic-happiness/internal/service"
+	service2 "github.com/SuKaiFei/fantastic-happiness/internal/service/collect"
 )
 
 // Injectors from wire.go:
@@ -37,7 +38,7 @@ func InitApp() (*App, func(), error) {
 		cleanup()
 		return nil, nil, err
 	}
-	engine, err := http.New(serviceService)
+	service3, cleanup5, err := service2.New(daoDao)
 	if err != nil {
 		cleanup4()
 		cleanup3()
@@ -45,16 +46,27 @@ func InitApp() (*App, func(), error) {
 		cleanup()
 		return nil, nil, err
 	}
-	server, err := grpc.New(serviceService)
+	engine, err := http.New(serviceService, service3)
 	if err != nil {
+		cleanup5()
 		cleanup4()
 		cleanup3()
 		cleanup2()
 		cleanup()
 		return nil, nil, err
 	}
-	app, cleanup5, err := NewApp(serviceService, engine, server)
+	server, err := grpc.New(serviceService, service3)
 	if err != nil {
+		cleanup5()
+		cleanup4()
+		cleanup3()
+		cleanup2()
+		cleanup()
+		return nil, nil, err
+	}
+	app, cleanup6, err := NewApp(serviceService, engine, server)
+	if err != nil {
+		cleanup5()
 		cleanup4()
 		cleanup3()
 		cleanup2()
@@ -62,6 +74,7 @@ func InitApp() (*App, func(), error) {
 		return nil, nil, err
 	}
 	return app, func() {
+		cleanup6()
 		cleanup5()
 		cleanup4()
 		cleanup3()

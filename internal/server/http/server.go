@@ -12,7 +12,7 @@ import (
 var svc pb.DemoServer
 
 // New new a bm server.
-func New(s pb.DemoServer) (engine *bm.Engine, err error) {
+func New(s pb.DemoServer, scSvc pb.StockCollectServer) (engine *bm.Engine, err error) {
 	var (
 		cfg bm.ServerConfig
 		ct  paladin.TOML
@@ -26,6 +26,7 @@ func New(s pb.DemoServer) (engine *bm.Engine, err error) {
 	svc = s
 	engine = bm.DefaultServer(&cfg)
 	pb.RegisterDemoBMServer(engine, s)
+	pb.RegisterStockCollectBMServer(engine, scSvc)
 	initRouter(engine)
 	err = engine.Start()
 	return

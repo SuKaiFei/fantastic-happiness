@@ -22,7 +22,7 @@ func (d *dao) GetStockByToday(ctx context.Context, projections ...string) (stock
 		filter  = bson.D{
 			{"date", date},
 		}
-		opt = new(options.FindOptions).SetLimit(1)
+		opt = new(options.FindOptions)
 	)
 
 	if len(projections) > 0 {

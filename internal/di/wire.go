@@ -8,11 +8,12 @@ import (
 	"github.com/SuKaiFei/fantastic-happiness/internal/server/grpc"
 	"github.com/SuKaiFei/fantastic-happiness/internal/server/http"
 	"github.com/SuKaiFei/fantastic-happiness/internal/service"
+	colSvc "github.com/SuKaiFei/fantastic-happiness/internal/service/collect"
 
 	"github.com/google/wire"
 )
 
 //go:generate kratos t wire
 func InitApp() (*App, func(), error) {
-	panic(wire.Build(dao.Provider, service.Provider, http.New, grpc.New, NewApp))
+	panic(wire.Build(dao.Provider, service.Provider, colSvc.Provider, http.New, grpc.New, NewApp))
 }

@@ -21,6 +21,7 @@ require (
 	github.com/smartystreets/goconvey v1.6.4
 	github.com/valyala/fasthttp v1.19.0
 	go.mongodb.org/mongo-driver v1.4.4
+	go.uber.org/atomic v1.6.0
 	golang.org/x/crypto v0.0.0-20201221181555-eec23a3978ad // indirect
 	golang.org/x/sync v0.0.0-20201207232520-09787c993a3a // indirect
 	golang.org/x/sys v0.0.0-20210110051926-789bb1bd4061 // indirect

@@ -1,0 +1,25 @@
+// 定义项目 API 的 proto 文件 可以同时描述 gRPC 和 HTTP API
+// protobuf 文件参考:
+//  - https://developers.google.com/protocol-buffers/
+syntax = "proto3";
+
+import "github.com/gogo/protobuf/gogoproto/gogo.proto";
+import "google/protobuf/empty.proto";
+import "google/api/annotations.proto";
+
+package github.com.SuKaiFei.fantastic_happiness.service.v1;
+
+option go_package = "api";
+option (gogoproto.goproto_getters_all) = false;
+
+service StockCollect {
+    rpc Ping (.google.protobuf.Empty) returns (.google.protobuf.Empty);
+
+    // 作业同步今天深沪证券交易所股票-分钟数据
+    rpc SyncStockMinAtToday (.google.protobuf.Empty) returns (.google.protobuf.Empty) {
+        option (google.api.http) = {
+            post: "/api/v1/stock_collect/sync/stock_min/today"
+        };
+    }
+}
+

@@ -2,68 +2,42 @@ package service
 
 import (
 	"context"
+	"time"
+
 	pb "github.com/SuKaiFei/fantastic-happiness/api"
 	"github.com/SuKaiFei/fantastic-happiness/internal/model"
 	"github.com/go-kratos/kratos/pkg/log"
+
 	"github.com/piquette/finance-go/chart"
 	"github.com/piquette/finance-go/datetime"
-	"time"
+	"go.uber.org/atomic"
+	"google.golang.org/protobuf/types/known/emptypb"
 )
 
-// jobSyncSSEStockList 作业同步今天上海证券交易所股票列表
-func (s *Service) jobSyncSSEStockList() {
-	log.Info("jobSyncSSEStockList start")
-	ctx := context.Background()
+var (
+	stockCollectMinTaskFlag = atomic.NewBool(true)
+)
 
-	stocks, err := s.GetSSEStockList(ctx)
-	if err != nil {
-		log.Error("GetSSEStockList err(%+v)", err)
-		return
+func (s *Service) SyncStockMinAtToday(context.Context, *emptypb.Empty) (*emptypb.Empty, error) {
+	if !stockCollectMinTaskFlag.Load() {
+		return &emptypb.Empty{}, nil
 	}
+	stockCollectMinTaskFlag.Store(false)
 
-	for _, stock := range stocks {
-		_, err := s.dao.AddStock(ctx, stock)
-		if err != nil {
-			log.Error("AddStock stock(%+v) err(%+v)", stock, err)
-			return
-		}
-	}
+	go s.SyncStockMinAtTodayJob()
 
-	log.Info("jobSyncSSEStockList end")
-	return
+	return &emptypb.Empty{}, nil
 }
 
-// jobSyncSZSEStockList 作业同步今天深圳证券交易所股票列表
-func (s *Service) jobSyncSZSEStockList() {
-	log.Info("jobSyncSZSEStockList start")
-	ctx := context.Background()
+func (s *Service) SyncStockMinAtTodayJob() {
+	defer stockCollectMinTaskFlag.Store(true)
 
-	stocks, err := s.GetSZSEStockList(ctx)
-	if err != nil {
-		log.Error("GetSZSEStockList err(%+v)", err)
-		return
-	}
-
-	for _, stock := range stocks {
-		_, err := s.dao.AddStock(ctx, stock)
-		if err != nil {
-			log.Error("AddStock stock(%+v) err(%+v)", stock, err)
-			return
-		}
-	}
-
-	log.Info("jobSyncSZSEStockList end")
-	return
-}
-
-// jobSyncStockToday 作业同步今天深沪证券交易所股票
-func (s *Service) jobSyncStockToday() {
-	log.Info("jobSyncStockToday start")
+	log.Info("SyncStockMinAtTodayJob start")
 	ctx := context.Background()
 
 	stocks, err := s.dao.GetStockByToday(ctx, "_id", "stock_exchange", "stock_name", "stock_code")
 	if err != nil {
-		log.Error("GetStockByToday err(%+v)", err)
+		log.Error("[SyncStockMinAtTodayJob]GetStockByToday err(%+v)", err)
 		return
 	}
 
@@ -79,6 +53,8 @@ func (s *Service) jobSyncStockToday() {
 		case pb.StockExchange_SZSE:
 			symbol += ".SZ"
 		}
+
+		log.Info("[SyncStockMinAtTodayJob]同步股票(%s)", symbol)
 		params := &chart.Params{
 			Symbol:   symbol,
 			Interval: datetime.OneMin,
@@ -99,24 +75,22 @@ func (s *Service) jobSyncStockToday() {
 			stockPrices = append(stockPrices, price)
 		}
 		if err = iter.Err(); err != nil {
-			log.Error("symbol(%s) iter.Err(%+v)", symbol, err)
+			log.Error("[SyncStockMinAtTodayJob] symbol(%s) iter.Err(%+v)", symbol, err)
 			continue
 		}
 
-		stockDay := &model.StockDay{
+		stockMin := &model.StockMin{
 			Date:          curTime,
 			StockExchange: stock.StockExchange,
 			StockCode:     stock.StockCode,
 			StockName:     stock.StockName,
 			Prices:        stockPrices,
 		}
-		_, err := s.dao.AddStockDay(ctx, stockDay)
+		_, err := s.dao.AddStockMin(ctx, stockMin)
 		if err != nil {
-			log.Error("AddStockDay stockDay(%+v) err(%+v)", stockDay, err)
+			log.Error("[SyncStockMinAtTodayJob] AddStockMin stockMin(%+v) err(%+v)", stockMin, err)
 			return
 		}
-
 	}
-	log.Info("jobSyncStockToday end")
-	return
+	log.Info("SyncStockMinAtTodayJob end")
 }

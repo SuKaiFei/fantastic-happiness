@@ -10,11 +10,11 @@ import (
 	"time"
 )
 
-type StockDayer interface {
-	AddStockDay(context.Context, *model.StockMin) (*mongo.UpdateResult, error)
+type StockMiner interface {
+	AddStockMin(context.Context, *model.StockMin) (*mongo.UpdateResult, error)
 }
 
-func (d *dao) AddStockDay(ctx context.Context, stock *model.StockMin) (result *mongo.UpdateResult, err error) {
+func (d *dao) AddStockMin(ctx context.Context, stock *model.StockMin) (result *mongo.UpdateResult, err error) {
 	if stock == nil {
 		return
 	}

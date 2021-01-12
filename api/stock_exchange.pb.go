@@ -21,6 +21,7 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.ProtoPackageIsVersion3 // please upgrade the proto package
 
+// 股票交易所
 type StockExchange int32
 
 const (

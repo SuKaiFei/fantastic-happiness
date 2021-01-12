@@ -19,6 +19,7 @@ type Dao interface {
 	Ping(ctx context.Context) (err error)
 
 	Stocker
+	StockMiner
 	StockDayer
 	StockMonther
 }
