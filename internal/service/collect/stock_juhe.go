@@ -42,7 +42,7 @@ func (s *Service) GetSZSEStockList(ctx context.Context) (stocks []*model.Stock, 
 
 		stockResp, err := juhe.GetSzAllFinanceStock(s.appApi.Juhe.StockApiKey, page)
 		if err != nil {
-			return nil, errors.WithStack(err)
+			return nil, errors.Wrapf(err, "page(%d)", page)
 		}
 		if len(stockResp.Result.Data) == 0 {
 			break
@@ -97,7 +97,7 @@ func (s *Service) GetSSEStockList(ctx context.Context) (stocks []*model.Stock, e
 
 		stockResp, err := juhe.GetShAllFinanceStock(s.appApi.Juhe.StockApiKey, page)
 		if err != nil {
-			return nil, errors.WithStack(err)
+			return nil, errors.Wrapf(err, "page(%d)", page)
 		}
 		if len(stockResp.Result.Data) == 0 {
 			break
